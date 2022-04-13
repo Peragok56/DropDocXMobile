@@ -7,11 +7,17 @@ class Profile extends Component{
         this.state = {
             passwordVisible: false,
             newPassword: '',
+            dataVisible: false,
+            newData: '',
         }
     }
 
     passwordVisible = (visible) => {
         this.setState({ passwordVisible: visible });
+      }
+
+      dataVisible = (visible) => {
+        this.setState({ dataVisible: visible });
       }
 
     render(){
@@ -36,7 +42,7 @@ class Profile extends Component{
                     >
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                            <TextInput placeholder="Введите новое название" style={styles.textInput} onChange={newPassword => this.setState({newPassword: newPassword.nativeEvent.text})}/>
+                            <TextInput placeholder="Введите новый пароль" style={styles.textInput} onChange={newPassword => this.setState({newPassword: newPassword.nativeEvent.text})}/>
                                 <Text style={styles.formButton} onPress={changePassword}>Изменить</Text>
                                 <Pressable
                                     style={styles.modalClose}
@@ -47,13 +53,39 @@ class Profile extends Component{
                             </View>
                         </View>
                 </Modal>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.dataVisible}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                            <TextInput placeholder="email: root@dropdocx" style={styles.textInput}/>
+                            <TextInput placeholder="Логин: root" style={styles.textInput}/>
+                            <TextInput placeholder="Имя" style={styles.textInput}/>
+                            <TextInput placeholder="Фамилия" style={styles.textInput}/>
+                                <Text style={styles.formButton} onPress={changePassword}>Изменить</Text>
+                                <Pressable
+                                    style={styles.modalClose}
+                                    onPress={() => {this.dataVisible(false)}}
+                                >
+                                    <Text style={styles.buttonModalClose}>&#215;</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                </Modal>
+
+
                <Text style={styles.topText}>Профиль</Text> 
                <ScrollView contentContainerStyle={styles.profileView} showsHorizontalScrollIndicator={false}>
                    <Image source={require('../assets/icons/ava.png')} style={styles.ava}/>
                    <Text style={styles.avaText}>Данил Ленченков</Text>
                    <Text style={styles.avaMidText}>Главный администратор, образованный front-end разработчик и просто хороший человек</Text>
                    <TouchableOpacity>
-                       <Text style={styles.changePassword} onPress={() => this.passwordVisible(true)}>Сменить пороль</Text>
+                       <Text style={styles.changePassword} onPress={() => this.passwordVisible(true)}>Сменить пароль</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity>
+                       <Text style={styles.changePassword} onPress={() => this.dataVisible(true)}>Изменить</Text>
                    </TouchableOpacity>
                </ScrollView>
             </View>
@@ -164,4 +196,16 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6,
     },
+    textInput:{
+        backgroundColor: '#fff',
+        color: 'black',
+        width: "80%",
+        padding: 8,
+        marginTop: 15,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+        
+    }
 })

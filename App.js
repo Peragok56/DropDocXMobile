@@ -6,7 +6,7 @@ import axios from "./axios/axios";
 import storage from "./store/Storage";
 
 const App = () => {
-  const[isAuth, setAuth] = useState(false)
+  const[isAuth, setAuth] = useState(true)
   const[login, setLogin] = useState('')
   const[password, setPassword] = useState('')
 
