@@ -142,7 +142,9 @@ const styles = StyleSheet.create({
         marginTop: 25,
         padding: 8,
         backgroundColor: '#336BD8',
-        color: 'white'
+        color: 'white',
+        width: 125,
+        textAlign: 'center',
     },
     modalClose: {
         position: 'absolute',

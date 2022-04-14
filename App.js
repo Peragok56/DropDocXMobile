@@ -24,6 +24,25 @@ const App = () => {
           token: res.data.data.token
         }
       })
+      axios.get('/account/verifyToken', {headers: {Authorization: res.data.data.token}})
+      .then((res2) => {
+        axios.get('/account/getInfo', {headers: {Authorization: res.data.data.token}})
+        .then((res3) => {
+          console.log(res3);
+          storage.save({
+            key: 'email',
+            data: {
+              email: res3.data.data.account.email
+            }
+          })
+          storage.save({
+            key: 'homeFolderId',
+            data: {
+              homeFolderId: res3.data.data.account.homeFolderId
+            }
+          })
+        })
+      })
       setAuth(true)
     })
     .catch((e) => {

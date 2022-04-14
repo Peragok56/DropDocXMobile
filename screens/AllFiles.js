@@ -26,7 +26,15 @@ class AllFiles extends Component{
             console.log(res2);
             this.setState({file: res2.data.data.files})
         }))
+
+        storage.load({
+            key: ['token', 'homeFolderId'],
+        })
+        .then(res => console.log(res))
+        
     }
+
+
 
     setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
