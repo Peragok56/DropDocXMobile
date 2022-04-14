@@ -9,11 +9,13 @@ class AllFiles extends Component{
         super(props)
         this.state = {
             file: [],
+            folders: [],
             modalVisible: false,
             modalChange: 'view',
             nowId: null,
             newFileName: '',
             refresh: false,
+            folderId: '',
         }
     }
 
@@ -28,10 +30,15 @@ class AllFiles extends Component{
         }))
 
         storage.load({
-            key: ['token', 'homeFolderId'],
+            key: 'homeFolderId'
         })
-        .then(res => console.log(res))
+        .then(res => this.setState({folderId: res.homeFolderId}))
         
+        storage.load({
+            key: 'token'
+        })
+        .then((res) => axios.get(`folder/getList?folderId=${this.state.folderId}`, {headers: {Authorization: res.token}}))
+        .then((res2) => this.setState({folders: res2.data.data.folder.folders}))
     }
 
 
@@ -104,6 +111,20 @@ class AllFiles extends Component{
             .then(res => axios.patch('/file/makeTemplate', {data: fData, headers: {Authorization: res.token}}))
         }
 
+        const rotate = (folderId) => {
+            storage.load({
+                key: 'token'
+            })
+            .then((res) => axios.get(`folder/getList?folderId=${folderId}`, {headers: {Authorization: res.token}})
+            .then((res2) => {
+                console.log(res2.data.data.folder);
+                this.setState({folder: res2.data.data.folder.folders})
+                this.setState({file: res2.data.data.folder.files})
+                this.setState({folderId: res2.data.data.folder._id})
+            }))
+            
+        }
+
         return(
             <View style={styles.container}>
                 <Modal
@@ -158,14 +179,20 @@ class AllFiles extends Component{
                       refreshing={this.state.refresh}
                       onRefresh={onRefresh}
                     />}
-                >
+                >   
+                        {this.state.folders.map((item) => 
+                            item.isDeleted === false ?
+                            <TouchableOpacity style={styles.card} onPress={() => rotate(item._id)} key={nanoid()}>
+                                <Image source={require('../assets/files/folder.png')} style={{width: "70%", height: "70%"}}/>
+                                <Text style={styles.cardText}>{item.name}</Text>
+                            </TouchableOpacity> : null
+                        )}    
                         {this.state.file.map((item) => 
                             item.isDeleted === false ?
                                 <TouchableOpacity style={styles.card} onLongPress={() => {this.setModalVisible(true), this.setState({nowId: item._id})}} key={nanoid()}>
                                     <Image source={require('../assets/files/File.png')} style={{width: "70%", height: "70%"}}/>
                                     <Text style={styles.cardText}>{item.name}</Text>
                                 </TouchableOpacity> : null
-                            
                         )}
                         
                 </ScrollView>
